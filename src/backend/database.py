@@ -163,6 +163,17 @@ initial_activities = {
         },
         "max_participants": 16,
         "participants": ["william@mergington.edu", "jacob@mergington.edu"]
+    },
+    "Manga Maniacs": {
+        "description": "Level up your story game! Dive into the epic world of Japanese Manga — from shonen battles and shojo romance to mind-bending seinen and magical isekai adventures. Discover iconic series, share fan theories, and unleash your inner otaku in a club where every panel sparks a new obsession!",
+        "schedule": "Tuesdays, 5:00 PM - 6:00 PM",
+        "schedule_details": {
+            "days": ["Tuesday"],
+            "start_time": "17:00",
+            "end_time": "18:00"
+        },
+        "max_participants": 25,
+        "participants": []
     }
 }
 
