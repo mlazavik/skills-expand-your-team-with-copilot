@@ -569,6 +569,21 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="social-share">
+        <span class="social-share-label">Share:</span>
+        <button class="share-button share-twitter tooltip" data-activity="${name}" aria-label="Share on X (Twitter)">
+          𝕏
+          <span class="tooltip-text">Share on X (Twitter)</span>
+        </button>
+        <button class="share-button share-facebook tooltip" data-activity="${name}" aria-label="Share on Facebook">
+          f
+          <span class="tooltip-text">Share on Facebook</span>
+        </button>
+        <button class="share-button share-copy tooltip" data-activity="${name}" aria-label="Copy link">
+          🔗
+          <span class="tooltip-text">Copy link</span>
+        </button>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -587,7 +602,60 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Add click handlers for social share buttons
+    activityCard.querySelectorAll(".share-button").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const activityName = button.dataset.activity;
+        const activityDetails = allActivities[activityName];
+        if (button.classList.contains("share-twitter")) {
+          shareActivityOnTwitter(activityName, activityDetails);
+        } else if (button.classList.contains("share-facebook")) {
+          shareActivityOnFacebook(activityName);
+        } else if (button.classList.contains("share-copy")) {
+          copyActivityLink(activityName, button);
+        }
+      });
+    });
+
     activitiesList.appendChild(activityCard);
+  }
+
+  // Social sharing functions
+  function getActivityShareUrl(activityName) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("activity", activityName);
+    return url.toString();
+  }
+
+  function shareActivityOnTwitter(activityName, details) {
+    const text = `Check out "${activityName}" at Mergington High School! ${details.description}`;
+    const url = getActivityShareUrl(activityName);
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, "_blank", "noopener,noreferrer");
+  }
+
+  function shareActivityOnFacebook(activityName) {
+    const url = getActivityShareUrl(activityName);
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, "_blank", "noopener,noreferrer");
+  }
+
+  function copyActivityLink(activityName, button) {
+    const url = getActivityShareUrl(activityName);
+    const tooltip = button.querySelector(".tooltip-text");
+    const originalText = tooltip.textContent;
+    navigator.clipboard.writeText(url).then(() => {
+      tooltip.textContent = "Copied!";
+      setTimeout(() => {
+        tooltip.textContent = originalText;
+      }, 2000);
+    }).catch(() => {
+      tooltip.textContent = "Copy failed";
+      setTimeout(() => {
+        tooltip.textContent = originalText;
+      }, 2000);
+    });
   }
 
   // Event listeners for search and filter
